@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo This will install sendmail and use a gmail account as a relay for outgoing emails
+read -p "press enter to continue"
+
 echo what is your gmail username?: ; read gmail_username
 echo what is your gmail password?: ; read gmail_password
 echo where should we send a test email?: ; read recipient
