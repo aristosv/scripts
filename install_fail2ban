@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo This will install fail2ban, set up an ssh jail, and send an email when an ip is banned
+read -p "press enter to continue"
+
+echo where should we send an email when an ip is banned?: ; read recipient
+
+echo install fail2ban
+apt install -y fail2ban > /dev/null 2>&1
+
+echo configure fail2ban
+cat >/etc/fail2ban/jail.local <<'EOL'
+[DEFAULT]
+maxretry = 3
+bantime = -1
+findtime = 300
+action = %(action_mw)s
+banaction = iptables-multiport
+destemail = $recipient
+ignoreip = 127.0.0.1 139.138.204.42
+
+[sshd]
+port = 22
+enabled = true
+EOL
+
+echo restart fail2ban service
+systemctl restart fail2ban
