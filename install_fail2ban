@@ -9,7 +9,7 @@ echo installing fail2ban
 apt install -y fail2ban > /dev/null 2>&1
 
 echo configure fail2ban
-cat >/etc/fail2ban/jail.local <<"EOL"
+cat <<EOF >> /etc/fail2ban/jail.local
 [DEFAULT]
 maxretry = 3
 bantime = -1
@@ -22,7 +22,7 @@ ignoreip = 127.0.0.1
 [sshd]
 port = 22
 enabled = true
-EOL
+EOF
 
 echo restart fail2ban service
 systemctl restart fail2ban
