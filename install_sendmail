@@ -1,8 +1,8 @@
 #!/bin/bash
 
-recipient=
-gmail_username=
-gmail_password=
+echo what is your gmail username?: ; read gmail_username
+echo what is your gmail password?: ; read gmail_password
+echo where should we send a test email?: ; read recipient
 
 echo install sendmail
 apt install -y sendmail sasl2-bin mailutils sendmail-bin openssl > /dev/null 2>&1
