@@ -3,7 +3,7 @@
 echo This will install sendmail and use a gmail account as a relay for outgoing emails
 read -p "press enter to continue"
 
-echo what is your gmail username?: ; read gmail_username
+echo what is your gmail email address?: ; read gmail_email_address
 echo what is your gmail password?: ; read gmail_password
 echo where should we send a test email?: ; read recipient
 
@@ -11,7 +11,7 @@ echo installing sendmail
 apt install -y sendmail sasl2-bin mailutils sendmail-bin openssl > /dev/null 2>&1
 
 mkdir -m 700 /etc/mail/authinfo/
-echo AuthInfo: \"U:root\" \"I:$gmail_username\" \"P:$gmail_password\" >> /etc/mail/authinfo/gmail-auth
+echo AuthInfo: \"U:root\" \"I:$gmail_email_address\" \"P:$gmail_password\" >> /etc/mail/authinfo/gmail-auth
 makemap hash /etc/mail/authinfo/gmail-auth < /etc/mail/authinfo/gmail-auth
 
 sed -i '/MAILER_DEFINITIONS/idefine(`SMART_HOST'\'',`[smtp.gmail.com]'\'')dnl' /etc/mail/sendmail.mc
