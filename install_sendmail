@@ -10,6 +10,7 @@ echo where should we send a test email?: ; read recipient
 echo installing sendmail
 apt install -y sendmail sasl2-bin mailutils sendmail-bin openssl > /dev/null 2>&1
 
+echo configuring sendmail
 mkdir -m 700 /etc/mail/authinfo/
 echo AuthInfo: \"U:root\" \"I:$gmail_email_address\" \"P:$gmail_password\" >> /etc/mail/authinfo/gmail-auth
 makemap hash /etc/mail/authinfo/gmail-auth < /etc/mail/authinfo/gmail-auth
