@@ -1,5 +1,5 @@
 # Various Scripts
-Automated installation of various binaries
+Automated installation of various binaries.
 
 Run any of the commands below on a clean, minimal installation of Debian Buster.
 
