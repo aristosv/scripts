@@ -5,7 +5,7 @@ read -p "press enter to continue"
 
 echo where should we send an email when an ip is banned?: ; read recipient
 
-echo install fail2ban
+echo installing fail2ban
 apt install -y fail2ban > /dev/null 2>&1
 
 echo configure fail2ban
