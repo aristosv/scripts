@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo install sendmail and prerequisites
+apt install -y sendmail sendmail-bin mailutils sasl2-bin openssl
+
+echo create authetication folder
+mkdir -m 700 /etc/mail/authinfo/
+
+echo create authetication file
+echo AuthInfo: "U:root" "I:$gmail_email_address" "P:$gmail_password" >> /etc/mail/authinfo/gmail-auth
+
+echo build authetication file
+makemap hash /etc/mail/authinfo/gmail-auth < /etc/mail/authinfo/gmail-auth
+
+echo configure sendmail
+sed -i '/MAILER_DEFINITIONS/idefine(`SMART_HOST',`[smtp.gmail.com]')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`RELAY_MAILER_ARGS', `TCP $h 587')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`ESMTP_MAILER_ARGS', `TCP $h 587')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_OPTIONS', `A p')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/iTRUST_AUTH_MECH(`EXTERNAL DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_MECHANISMS', `EXTERNAL GSSAPI DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/iFEATURE(`authinfo',`hash -o /etc/mail/authinfo/gmail-auth.db')dnl' /etc/mail/sendmail.mc
+
+echo build configuration
+make -C /etc/mail
+
+echo reload sendmail
+/etc/init.d/sendmail reload
