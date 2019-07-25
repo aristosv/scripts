@@ -1,28 +1,26 @@
 #!/bin/bash
 
-echo install sendmail and prerequisites
-apt install -y sendmail sendmail-bin mailutils sasl2-bin openssl
+recipient=
+gmail_username=
+gmail_password=
 
-echo create authentication folder
+echo install sendmail
+apt install -y sendmail sasl2-bin mailutils sendmail-bin openssl > /dev/null 2>&1
+
 mkdir -m 700 /etc/mail/authinfo/
-
-echo create authentication file
-echo AuthInfo: "U:root" "I:$gmail_email_address" "P:$gmail_password" >> /etc/mail/authinfo/gmail-auth
-
-echo build authentication file
+echo AuthInfo: \"U:root\" \"I:$gmail_username\" \"P:$gmail_password\" >> /etc/mail/authinfo/gmail-auth
 makemap hash /etc/mail/authinfo/gmail-auth < /etc/mail/authinfo/gmail-auth
 
-echo configure sendmail
-sed -i '/MAILER_DEFINITIONS/idefine(`SMART_HOST',`[smtp.gmail.com]')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/idefine(`RELAY_MAILER_ARGS', `TCP $h 587')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/idefine(`ESMTP_MAILER_ARGS', `TCP $h 587')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_OPTIONS', `A p')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/iTRUST_AUTH_MECH(`EXTERNAL DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_MECHANISMS', `EXTERNAL GSSAPI DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/iFEATURE(`authinfo',`hash -o /etc/mail/authinfo/gmail-auth.db')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`SMART_HOST'\'',`[smtp.gmail.com]'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`RELAY_MAILER_ARGS'\'', `TCP $h 587'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`ESMTP_MAILER_ARGS'\'', `TCP $h 587'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_OPTIONS'\'', `A p'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/iTRUST_AUTH_MECH(`EXTERNAL DIGEST-MD5 CRAM-MD5 LOGIN PLAIN'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_MECHANISMS'\'', `EXTERNAL GSSAPI DIGEST-MD5 CRAM-MD5 LOGIN PLAIN'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/iFEATURE(`authinfo'\'',`hash -o /etc/mail/authinfo/gmail-auth.db'\'')dnl' /etc/mail/sendmail.mc
 
-echo build configuration
-make -C /etc/mail
-
-echo reload sendmail
+make -C /etc/mail > /dev/null 2>&1
 /etc/init.d/sendmail reload
+
+echo sending test email
+echo "Just testing my sendmail gmail relay" | mail -s "Sendmail gmail Relay" $recipient
