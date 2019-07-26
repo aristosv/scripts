@@ -10,6 +10,10 @@ bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristo
 ```
 bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_fail2ban)
 ```
+- This will install mariadb and create the first user and database.
+```
+bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_mariadb)
+```
 - This will install sendmail and use a gmail account as a relay for outgoing emails.
 ```
 bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_sendmail)
