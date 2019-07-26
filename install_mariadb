@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo This will install mariadb and create the first user and database
+read -p "press enter to continue"
+
+echo set a root password for mariadb: ; read database_root_pass
+echo enter a name for the first database: ; read first_database_name
+echo enter a username for the first database: ; read first_database_user
+echo enter a password for the first database: ; read first_database_pass
+
+echo installing mariadb
+apt-get install -y mariadb-server > /dev/null 2>&1
+
+echo securing mariadb
+echo setting mariadb root password
+mysql --user="root" --password="" --execute="SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$database_root_pass');"
+
+echo removing anonymous users
+mysql --user="root" --password="" --execute="DELETE FROM mysql.user WHERE User='';"
+
+echo disabling remote root logins
+mysql --user="root" --password="" --execute="DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+
+echo removing test database
+mysql --user="root" --password="" --execute="DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';"
+
+echo flushing privileges
+mysql --user="root" --password="" --execute="FLUSH PRIVILEGES;"
+
+echo creating database
+mysql --user="root" --password="$database_root_pass" --execute="CREATE DATABASE $first_database_name;"
+mysql --user="root" --password="$database_root_pass" --execute="CREATE USER '$first_database_user'@'localhost' IDENTIFIED BY '$first_database_pass';"
+mysql --user="root" --password="$database_root_pass" --execute="GRANT ALL ON $first_database_name.* TO '$first_database_user'@'localhost' IDENTIFIED BY '$first_database_pass' WITH GRANT OPTION;"
+mysql --user="root" --password="$database_root_pass" --execute="FLUSH PRIVILEGES;"
+
+echo mariadb has been installed
+echo first database name: $first_database_name
+echo first database user: $first_database_user
+echo first database pass: $first_database_pass
