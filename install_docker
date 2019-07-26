@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo installing docker prerequisites
+apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common > /dev/null 2>&1
+
+echo adding docker key
+curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -  > /dev/null 2>&1
+
+echo adding docker repositories
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+echo updating repositories
+apt update > /dev/null 2>&1
+
+echo installing docker
+apt install -y docker-ce docker-ce-cli containerd.io > /dev/null 2>&1
+
+echo creating containers user
+adduser --disabled-password --gecos '' containers > /dev/null 2>&1
+
+echo changing containers user password
+echo containers:containers | chpasswd
+
+echo adding containers user to containers group
+usermod -aG docker containers
+
+echo docker installation complete
