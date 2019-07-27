@@ -9,7 +9,7 @@ echo installing apache
 apt-get install -y apache2 > /dev/null 2>&1
 
 echo installing php
-apt-get install -y php php-mysql libapache2-mod-php php-curl > /dev/null 2>&1
+apt-get install -y php php-mysql libapache2-mod-php php-curl php-gd php-zip > /dev/null 2>&1
 
 echo creating website folder
 mkdir /var/www/html/$domain_name/
