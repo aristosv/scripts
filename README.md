@@ -1,4 +1,4 @@
-# Various Scripts
+# scripts
 
 Run any of the commands below on a clean, minimal installation of Debian Buster.
 
