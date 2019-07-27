@@ -5,8 +5,8 @@ read -p "press enter to continue"
 
 echo set a root password for mariadb: ; read database_root_pass
 echo enter a name for the first database: ; read first_database_name
-echo enter a username for the first database: ; read first_database_user
-echo enter a password for the first database: ; read first_database_pass
+echo enter a username for the first user: ; read first_database_user
+echo enter a password for the first user: ; read first_database_pass
 
 echo installing mariadb
 apt-get install -y mariadb-server > /dev/null 2>&1
