@@ -1,0 +1,19 @@
+echo this assumes you already installed apache.
+read -p "press enter to continue"
+
+echo what is the domain name you will be hosting on this server: ; read domain_name
+
+echo downloading wordpress
+wget --no-check-certificate https://wordpress.org/latest.zip > /dev/null 2>&1
+
+echo installing unzip
+apt-get install -y unzip > /dev/null 2>&1
+
+echo extracting wordpress
+unzip latest.zip -d /tmp > /dev/null 2>&1
+rm -f latest.zip
+mv /tmp/wordpress/* /var/www/html/$domain_name/
+
+echo setting permissions
+chown -R www-data:www-data /var/www/html/$domain_name
+chmod -R 755 /var/www/html/$domain_name
