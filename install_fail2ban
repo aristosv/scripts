@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo This will install fail2ban, set up an ssh jail, and send an email when an ip is banned. it assumes you already installed sendmail.
+echo this will install fail2ban, set up an ssh jail, and send an email when an ip is banned. it assumes you already installed sendmail.
 read -p "press enter to continue"
 
 echo where should we send an email when an ip is banned?: ; read recipient
