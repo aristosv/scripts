@@ -1,4 +1,6 @@
-echo this assumes you already installed apache.
+#!/bin/bash
+
+echo this installs the latest version of wordpress. it assumes you already installed apache.
 read -p "press enter to continue"
 
 echo what is the domain name you will be hosting on this server: ; read domain_name
@@ -17,3 +19,6 @@ mv /tmp/wordpress/* /var/www/html/$domain_name/
 echo setting permissions
 chown -R www-data:www-data /var/www/html/$domain_name
 chmod -R 755 /var/www/html/$domain_name
+
+echo installation complete
+echo you can start the wordpess installation wizard at $domain_name
