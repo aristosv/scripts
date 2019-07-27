@@ -10,7 +10,7 @@ bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristo
 ```
 bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_docker)
 ```
-- This will install fail2ban, set up an ssh jail, and send an email when an ip is banned.
+- This will install fail2ban, set up an ssh jail, and send an email when an ip is banned. it assumes you already installed sendmail.
 ```
 bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_fail2ban)
 ```
