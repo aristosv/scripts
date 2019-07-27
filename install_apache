@@ -1,0 +1,52 @@
+#!/bin/bash
+
+echo This will install apache, php and create the configuration for the first domain
+read -p "press enter to continue"
+
+echo what is the domain name you will be hosting on this server: ; read domain_name
+
+echo installing apache
+apt-get install -y apache2 > /dev/null 2>&1
+
+echo installing php
+apt-get install -y php php-mysql libapache2-mod-php php-curl > /dev/null 2>&1
+
+echo creating website folder
+mkdir /var/www/html/$domain_name/
+
+echo setting permissions
+chown -R www-data:www-data /var/www/html/$domain_name
+chmod -R 755 /var/www/html/$domain_name
+
+echo adding virtual host
+cat > /etc/apache2/sites-available/$domain_name.conf << EOL
+<VirtualHost *:80>
+  DocumentRoot /var/www/html/$domain_name
+  ServerName $domain_name
+  
+  <Directory /var/www/html/$domain_name/>
+   Options Indexes FollowSymLinks MultiViews
+   AllowOverride All
+   Order allow,deny
+   allow from all
+  </Directory>
+  
+ ErrorLog \${APACHE_LOG_DIR}/$domain_name-error.log
+ CustomLog \${APACHE_LOG_DIR}/$domain_name-access.log combined
+</VirtualHost>
+EOL
+
+echo disabling default host
+a2dissite 000-default.conf > /dev/null 2>&1
+
+echo enabling $domain_name
+a2ensite $domain_name.conf > /dev/null 2>&1
+
+echo enabling mod-rewrite
+a2enmod rewrite > /dev/null 2>&1
+
+echo restarting apache
+systemctl restart apache2.service
+
+echo installation complete
+echo you can copy your website in /var/www/html/$domain_name
