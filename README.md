@@ -24,5 +24,5 @@ bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristo
 ```
 - This will install the latest version of wordpress. it assumes you already installed apache.
 ```
-bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_sendmail)
+bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_wordpress)
 ```
