@@ -2,6 +2,10 @@
 
 Run any of the commands below on a clean, minimal installation of Debian Buster.
 
+- This will install apache, php and create the configuration for the first domain.
+```
+bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_apache)
+```
 - This will install docker.
 ```
 bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_docker)
