@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo this will install opencart. it assumes you already installed apache and mariadb.
+read -p "press enter to continue"
+
+echo what is the domain name you will be hosting on this server: ; read domain_name
+
+echo downloading opencart
+wget --no-check-certificate https://github.com/opencart/opencart/releases/download/3.0.2.0/3.0.2.0-OpenCart.zip > /dev/null 2>&1
+
+echo installing unzip
+apt-get install -y unzip > /dev/null 2>&1
+
+echo extracting opencart
+unzip 3.0.2.0-OpenCart.zip -d /tmp > /dev/null 2>&1
+mv /tmp/upload/* /var/www/html/$domain_name/
+
+echo creating configuration files
+mv /var/www/html/$domain_name/config-dist.php /var/www/html/$domain_name/config.php
+mv /var/www/html/$domain_name/admin/config-dist.php /var/www/html/$domain_name/admin/config.php
+
+echo setting permissions
+chown -R www-data:www-data /var/www/html/$domain_name
+chmod -R 755 /var/www/html/$domain_name
+
+echo ===============================================================================================================
+echo opencart requires moving the storage directory outside the html directory
+echo visit $domain_name, go through the web installation wizard, return here and press enter
+echo the script will move the storage directory, edit the config files and delete the install directory
+echo ===============================================================================================================
+read -p "press enter to continue"
+
+echo moving storage directory
+mv /var/www/html/$domain_name/system/storage/ /var/www/html/storage/
+
+echo editing config files
+sed -i -e "s|define('DIR_STORAGE', DIR_SYSTEM . 'storage/');|define('DIR_STORAGE', '/var/www/html/storage/');|g" /var/www/html/$domain_name/config.php /var/www/html/$domain_name/admin/config.php
+
+echo deleting install directory
+rm -rf /var/www/html/$domain_name/install
+
+echo installation complete
+echo visit $domain_name
