@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo this will install opencart. it assumes you already installed apache and mariadb.
+echo this will install the latest stable opencart release. it assumes you already installed apache and mariadb.
 read -p "press enter to continue"
 
 echo what is the domain name you will be hosting on this server: ; read domain_name
