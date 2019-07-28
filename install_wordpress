@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo this will install the latest version of wordpress. it assumes you already installed apache.
+echo this will install the latest version of wordpress. it assumes you already installed apache and mariadb.
 read -p "press enter to continue"
 
 echo what is the domain name you will be hosting on this server: ; read domain_name
