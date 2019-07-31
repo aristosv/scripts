@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo this will install the latest stable phpmyadmin release. it assumes you already installed apache and mariadb.
+read -p "press enter to continue"
+
+echo what is your mariadb root password: ; read database_root_pass
+echo enter a username for the phpmyadmin user: ; read phpmyadmin_user
+echo enter a password for the phpmyadmin user: ; read phpmyadmin_pass
+echo what is the domain name you are hosting on this server: ; read domain_name
+
+echo creating phpmyadmin user
+mysql --user="root" --password="$database_root_pass" --execute="CREATE USER '$phpmyadmin_user'@'localhost' IDENTIFIED BY '$phpmyadmin_pass';"
+mysql --user="root" --password="$database_root_pass" --execute="GRANT ALL PRIVILEGES ON *.* TO '$phpmyadmin_user'@'localhost';"
+mysql --user="root" --password="$database_root_pass" --execute="FLUSH PRIVILEGES;"
+
+echo downloading phpmyadmin
+wget --no-check-certificate https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip -P /var/www/html/$domain_name > /dev/null 2>&1
+
+echo installing unzip
+apt-get install -y unzip > /dev/null 2>&1
+
+echo extracting phpmyadmin
+unzip /var/www/html/$domain_name/phpMyAdmin-latest-all-languages.zip -d /var/www/html/$domain_name > /dev/null 2>&1
+
+echo cleaning up
+rm /var/www/html/$domain_name/phpMyAdmin-latest-all-languages.zip
+mv /var/www/html/$domain_name/phpMyAdmin-latest-all-languages /var/www/html/$domain_name/phpmyadmin
+
+echo setting permissions
+chown -R www-data:www-data /var/www/html/$domain_name
+chmod -R 755 /var/www/html/$domain_name
