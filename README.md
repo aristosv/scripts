@@ -18,6 +18,10 @@ bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristo
 ```
 bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_mariadb)
 ```
+- This will install the latest stable opencart release. it assumes you already installed apache and mariadb.
+```
+bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_opencart)
+```
 - This will install sendmail and use a gmail account as a relay for outgoing emails.
 ```
 bash <(wget --no-check-certificate -qO- https://raw.githubusercontent.com/aristosv/scripts/master/install_sendmail)
