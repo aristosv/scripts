@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo updating repositories
+apt update > /dev/null 2>&1
+
 echo installing docker prerequisites
 apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common > /dev/null 2>&1
 
