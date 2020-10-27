@@ -8,7 +8,7 @@ echo what is your gmail password?: ; read gmail_password
 echo where should we send a test email?: ; read recipient
 
 echo installing sendmail
-apt install -y sendmail sasl2-bin mailutils sendmail-bin openssl > /dev/null 2>&1
+apt install -y sendmail sasl2-bin mailutils sendmail-bin openssl
 
 echo configuring sendmail
 mkdir -m 700 /etc/mail/authinfo/
@@ -23,7 +23,7 @@ sed -i '/MAILER_DEFINITIONS/iTRUST_AUTH_MECH(`EXTERNAL DIGEST-MD5 CRAM-MD5 LOGIN
 sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_MECHANISMS'\'', `EXTERNAL GSSAPI DIGEST-MD5 CRAM-MD5 LOGIN PLAIN'\'')dnl' /etc/mail/sendmail.mc
 sed -i '/MAILER_DEFINITIONS/iFEATURE(`authinfo'\'',`hash -o /etc/mail/authinfo/gmail-auth.db'\'')dnl' /etc/mail/sendmail.mc
 
-make -C /etc/mail > /dev/null 2>&1
+make -C /etc/mail
 /etc/init.d/sendmail reload
 
 echo sending test email
