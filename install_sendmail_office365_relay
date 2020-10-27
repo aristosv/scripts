@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo This will install sendmail and use a gmail account as a relay for outgoing emails
+echo This will install sendmail and use an office365 account as a relay for outgoing emails
 read -p "press enter to continue"
 
 echo what is your office365 email address?: ; read office365_email_address
