@@ -3,9 +3,9 @@
 echo This will install postfix and use an office365 account as a relay for outgoing emails
 read -p "press enter to continue"
 
-echo what is your office365 email address?: ; read office365_email_address
-echo what is your office365 email password?: ; read office365_password
-echo where should we send a test email?: ; read recipient
+echo what is your office365 email address?: ; read email_address
+echo what is your office365 email password?: ; read email_password
+echo where should we send a test email?: ; read email_recipient
 
 echo installing postfix
 echo "postfix postfix/mailname string $(hostname --fqdn)" | debconf-set-selections
@@ -15,17 +15,16 @@ apt install -y postfix mailutils
 echo configuring postfix
 sed -i -e '/relayhost/d' /etc/postfix/main.cf
 sed -i -e '/inet_interfaces/d' /etc/postfix/main.cf
-echo "/.+/ info@smsreminders.net" >> /etc/postfix/sender_canonical_maps
+echo "/.+/ $email_address" >> /etc/postfix/sender_canonical_maps
 
 cat <<EOT >> /etc/postfix/main.cf
 smtp_sasl_auth_enable = yes
-header_size_limit = 4096000
 inet_interfaces = 127.0.0.1
 smtp_tls_security_level = encrypt
 relayhost = smtp.office365.com:587
 smtp_sasl_security_options = noanonymous
 sender_canonical_maps = regexp:/etc/postfix/sender_canonical_maps
-smtp_sasl_password_maps = static:$office365_email_address:$office365_password
+smtp_sasl_password_maps = static:$email_address:$email_password
 EOT
 
 echo restarting postfix
@@ -34,4 +33,4 @@ systemctl start postfix
 systemctl status postfix
 
 echo sending test email
-echo "Just testing my sendmail office365 relay" | mail -s "Sendmail office365 Relay" $recipient
+echo "body test" | mail -s "subject test" $email_recipient
