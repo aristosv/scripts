@@ -16,8 +16,8 @@ echo AuthInfo: \"U:root\" \"I:$office365_email_address\" \"P:$office365_password
 makemap hash /etc/mail/authinfo/ofice365-auth < /etc/mail/authinfo/office365-auth
 
 sed -i '/MAILER_DEFINITIONS/idefine(`SMART_HOST'\'',`[smtp.office365.com]'\'')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/idefine(`RELAY_MAILER_ARGS'\'', `TCP $h 25'\'')dnl' /etc/mail/sendmail.mc
-sed -i '/MAILER_DEFINITIONS/idefine(`ESMTP_MAILER_ARGS'\'', `TCP $h 25'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`RELAY_MAILER_ARGS'\'', `TCP $h 587'\'')dnl' /etc/mail/sendmail.mc
+sed -i '/MAILER_DEFINITIONS/idefine(`ESMTP_MAILER_ARGS'\'', `TCP $h 587'\'')dnl' /etc/mail/sendmail.mc
 sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_OPTIONS'\'', `A p'\'')dnl' /etc/mail/sendmail.mc
 sed -i '/MAILER_DEFINITIONS/iTRUST_AUTH_MECH(`EXTERNAL DIGEST-MD5 CRAM-MD5 LOGIN PLAIN'\'')dnl' /etc/mail/sendmail.mc
 sed -i '/MAILER_DEFINITIONS/idefine(`confAUTH_MECHANISMS'\'', `EXTERNAL GSSAPI DIGEST-MD5 CRAM-MD5 LOGIN PLAIN'\'')dnl' /etc/mail/sendmail.mc
