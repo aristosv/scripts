@@ -15,15 +15,17 @@ apt install -y postfix mailutils
 echo configuring postfix
 sed -i -e '/relayhost/d' /etc/postfix/main.cf
 sed -i -e '/inet_interfaces/d' /etc/postfix/main.cf
+echo "/.+/ info@smsreminders.net" >> /etc/postfix/sender_canonical_maps
 
 cat <<EOT >> /etc/postfix/main.cf
 smtp_sasl_auth_enable = yes
-smtp_sasl_password_maps = static:$office365_email_address:$office365_password
-smtp_sasl_security_options = noanonymous
-smtp_tls_security_level = encrypt
 header_size_limit = 4096000
-relayhost = smtp.office365.com:587
 inet_interfaces = 127.0.0.1
+smtp_tls_security_level = encrypt
+relayhost = smtp.office365.com:587
+smtp_sasl_security_options = noanonymous
+sender_canonical_maps = regexp:/etc/postfix/sender_canonical_maps
+smtp_sasl_password_maps = static:$office365_email_address:$office365_password
 EOT
 
 echo restarting postfix
