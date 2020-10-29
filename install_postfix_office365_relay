@@ -1,0 +1,35 @@
+#!/bin/bash
+
+echo This will install postfix and use an office365 account as a relay for outgoing emails
+read -p "press enter to continue"
+
+echo what is your office365 email address?: ; read office365_email_address
+echo what is your office365 email password?: ; read office365_password
+echo where should we send a test email?: ; read recipient
+
+echo installing postfix
+echo "postfix postfix/mailname string $(hostname --fqdn)" | debconf-set-selections
+echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
+apt install -y postfix mailutils
+
+echo configuring postfix
+sed -i -e '/relayhost/d' /etc/postfix/main.cf
+sed -i -e '/inet_interfaces/d' /etc/postfix/main.cf
+
+cat <<EOT >> /etc/postfix/main.cf
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = static:$office365_email_address:$office365_password
+smtp_sasl_security_options = noanonymous
+smtp_tls_security_level = encrypt
+header_size_limit = 4096000
+relayhost = smtp.office365.com:587
+inet_interfaces = 127.0.0.1
+EOT
+
+echo restarting postfix
+systemctl stop postfix
+systemctl start postfix
+systemctl status postfix
+
+echo sending test email
+echo "Just testing my sendmail office365 relay" | mail -s "Sendmail office365 Relay" $recipient
