@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sed -i -e 's/localhost/localhost.localdomain localhost/g' /etc/hosts
+sed -i -e "s/$(hostname)/$(hostname).localdomain $(hostname)/g" /etc/hosts
