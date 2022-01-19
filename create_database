@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo creating database
+mysql --user="root" --password="root_pass_here" --execute="CREATE DATABASE db_name_here;"
+mysql --user="root" --password="root_pass_here" --execute="CREATE USER 'user_here'@'localhost' IDENTIFIED BY 'pass_here';"
+mysql --user="root" --password="root_pass_here" --execute="GRANT ALL ON user_here.* TO 'user_here'@'localhost' IDENTIFIED BY 'pass_here' WITH GRANT OPTION;"
+mysql --user="root" --password="root_pass_here" --execute="FLUSH PRIVILEGES;"
