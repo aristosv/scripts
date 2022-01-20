@@ -1,7 +1,13 @@
 #!/bin/bash
 
-echo creating database
-mysql --user="root" --password="root_pass_here" --execute="CREATE DATABASE db_name_here;"
-mysql --user="root" --password="root_pass_here" --execute="CREATE USER 'user_here'@'localhost' IDENTIFIED BY 'pass_here';"
-mysql --user="root" --password="root_pass_here" --execute="GRANT ALL ON user_here.* TO 'user_here'@'localhost' IDENTIFIED BY 'pass_here' WITH GRANT OPTION;"
-mysql --user="root" --password="root_pass_here" --execute="FLUSH PRIVILEGES;"
+echo creating database $domainname
+docker exec -it mariadb /bin/bash -c "mysql --user='root' --password='$dbrootpass' --execute='CREATE DATABASE $dbname;'"
+
+echo creating user $domainname
+docker exec -it mariadb /bin/bash -c "mysql --user='root' --password='$dbrootpass' --execute='CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';'"
+
+echo assigning privileges for user $domainname to database $dbname
+docker exec -it mariadb /bin/bash -c "mysql --user='root' --password='$dbrootpass' --execute='GRANT ALL ON $dbname.* TO '$dbuser'@'localhost' IDENTIFIED BY '$dbpass' WITH GRANT OPTION;'"
+
+echo flushing privileges
+docker exec -it mariadb /bin/bash -c "mysql --user='root' --password='$dbrootpass' --execute='FLUSH PRIVILEGES;'"
