@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo installing phpmyadmin
+docker pull lscr.io/linuxserver/phpmyadmin > /dev/null 2>&1
+docker run -d \
+ --restart=always \
+ --name phpmyadmin \
+ -h phpmyadmin \
+ -e PUID=1001 \
+ -e PGID=1001 \
+ -e PMA_ARBITRARY=1 \
+ --net=network \
+ -p 8082:80 \
+ -v phpmyadmin:/config \
+ lscr.io/linuxserver/phpmyadmin > /dev/null 2>&1
