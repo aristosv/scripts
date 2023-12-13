@@ -1,0 +1,40 @@
+# install
+apt install -y xinit x11-utils chromium xdotool fbset
+
+# configure
+sed -i -e 's/console/anybody/g' /etc/X11/Xwrapper.config
+echo '*/5 * * * * root export DISPLAY=:0.0 ; xdotool key Ctrl > /dev/null 2>&1 ' | tee -a /etc/cron.d/nosleep > /dev/null
+
+# create service
+nano /etc/systemd/system/browser.service
+
+[Unit]
+Description=browser service
+Wants=network-online.target
+After=network-online.target
+[Service]
+ExecStart=/bin/bash -c \
+          "xinit /usr/bin/chromium \
+          --aggressive-cache-discard \
+          --no-sandbox \
+          --enable-features=OverlayScrollbar \
+          --window-size=1920,1080 \
+          --start-fullscreen \
+          --kiosk \
+          --noerrdialogs \
+          --no-first-run \
+          --fast \
+          --fast-start \
+          --disable-infobars \
+          'https://www.youtube.com/embed/EXt7JIoDyHk?&autoplay=1&mute=1&loop=1&playlist=EXt7JIoDyHk' -- -nocursor"
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
+systemctl daemon-reload
+systemctl enable browser.service
+systemctl start browser.service
+
+# find resolution
+width=$(fbset -s | awk '/geometry/ { print $2 }')
+height=$(fbset -s | awk '/geometry/ { print $3 }')
