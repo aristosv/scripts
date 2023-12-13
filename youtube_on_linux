@@ -15,13 +15,17 @@ nano /etc/systemd/system/browser.service
 Description=browser service
 Wants=network-online.target
 After=network-online.target
+
 [Service]
+Type=simple
 ExecStart=/bin/bash -c \
-          "xinit /usr/bin/chromium \
+          "videoid=EXt7JIoDyHk \
+          width=$(fbset -s | awk '/geometry/ { print $2 }'); \
+          height=$(fbset -s | awk '/geometry/ { print $3 }'); \
+          xinit /usr/bin/chromium \
           --aggressive-cache-discard \
           --no-sandbox \
           --enable-features=OverlayScrollbar \
-          --window-size=1920,1080 \
           --start-fullscreen \
           --kiosk \
           --noerrdialogs \
@@ -29,15 +33,13 @@ ExecStart=/bin/bash -c \
           --fast \
           --fast-start \
           --disable-infobars \
-          'https://www.youtube.com/embed/EXt7JIoDyHk?&autoplay=1&mute=1&loop=1&playlist=EXt7JIoDyHk' -- -nocursor"
+          --window-size=${width},${height} \
+          \"https://www.youtube.com/embed/$videoid?&autoplay=1&mute=1&loop=1&playlist=$videoid\" -- -nocursor"
 Restart=always
+
 [Install]
 WantedBy=multi-user.target
 
 systemctl daemon-reload
 systemctl enable browser.service
 systemctl start browser.service
-
-# find resolution
-width=$(fbset -s | awk '/geometry/ { print $2 }')
-height=$(fbset -s | awk '/geometry/ { print $3 }')
