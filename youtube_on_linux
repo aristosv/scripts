@@ -6,6 +6,7 @@ sed -i -e 's/console/anybody/g' /etc/X11/Xwrapper.config
 echo '*/5 * * * * root export DISPLAY=:0.0 ; xdotool key Ctrl > /dev/null 2>&1 ' | tee -a /etc/cron.d/nosleep > /dev/null
 
 # create service
+# note 1: the &loop option only works if you also define the &playlist option
 nano /etc/systemd/system/browser.service
 
 [Unit]
