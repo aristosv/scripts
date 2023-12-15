@@ -18,7 +18,8 @@ After=network-online.target
 [Service]
 Type=simple
 ExecStart=/bin/bash -c " \
-        videoid=EXt7JIoDyHk \
+        youtubeurl=@option.youtubeurl@ \
+        videoid=$(echo $youtubeurl | sed -n 's/.*v=\(.*\)/\1/p') \
         width=$(fbset -s | awk '/geometry/ { print $2 }'); \
         height=$(fbset -s | awk '/geometry/ { print $3 }'); \
         xinit /usr/bin/chromium \
@@ -32,7 +33,7 @@ ExecStart=/bin/bash -c " \
           --fast \
           --fast-start \
           --disable-infobars \
-          --window-size=${width},${height} \
+          --window-size=$width,$height \
           'https://www.youtube.com/embed/'$videoid'?&autoplay=1&mute=1&loop=1&playlist='$videoid -- -nocursor"
 Restart=always
 
