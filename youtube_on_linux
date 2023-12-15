@@ -9,7 +9,7 @@ echo '*/5 * * * * root export DISPLAY=:0.0 ; xdotool key Ctrl > /dev/null 2>&1 '
 # note 1: the &loop option only works if you also define the &playlist option
 # note 2: the &autoplay option only works if you also define the &mute option
 
-tee /etc/systemd/system/browser.service > /dev/null << 'EOL'
+bash -c cat > /etc/systemd/system/browser.service << 'EOL'
 [Unit]
 Description=browser service
 Wants=network-online.target
