@@ -14,7 +14,7 @@ After=network-online.target
 [Service]
 ExecStart=/bin/bash -c "xinit /usr/bin/chromium-browser \
                               --aggressive-cache-discard \
-                              -no-sandbox \
+                              --no-sandbox \
                               --enable-features=OverlayScrollbar \
                               --window-size=1920,1080 \
                               --start-fullscreen \
