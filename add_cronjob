@@ -1,0 +1,1 @@
+echo "* * * * * root /root/monitor/monitor_vpn.sh" | tee /etc/cron.d/monitor_vpn
