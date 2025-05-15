@@ -19,7 +19,7 @@ echo "/.+/ $email_address" >> /etc/postfix/sender_canonical_maps
 
 cat <<EOT >> /etc/postfix/main.cf
 smtp_sasl_auth_enable = yes
-inet_interfaces = 127.0.0.1
+inet_interfaces = all
 smtp_tls_security_level = encrypt
 relayhost = smtp.office365.com:587
 smtp_sasl_security_options = noanonymous
