@@ -7,6 +7,9 @@ echo what is your office365 email address?: ; read email_address
 echo what is your office365 email password?: ; read email_password
 echo where should we send a test email?: ; read email_recipient
 
+echo updating repositories
+apt update
+
 echo installing postfix
 echo "postfix postfix/mailname string $(hostname --fqdn)" | debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
@@ -14,17 +17,19 @@ apt install -y postfix mailutils
 
 echo configuring postfix
 sed -i -e '/relayhost/d' /etc/postfix/main.cf
+sed -i -e '/mynetworks/d' /etc/postfix/main.cf
 sed -i -e '/inet_interfaces/d' /etc/postfix/main.cf
 echo "/.+/ $email_address" >> /etc/postfix/sender_canonical_maps
 
 cat <<EOT >> /etc/postfix/main.cf
-smtp_sasl_auth_enable = yes
 inet_interfaces = all
+smtp_sasl_auth_enable = yes
+mynetworks = 0.0.0.0/0 [::]/0
 smtp_tls_security_level = encrypt
 relayhost = smtp.office365.com:587
 smtp_sasl_security_options = noanonymous
-sender_canonical_maps = regexp:/etc/postfix/sender_canonical_maps
 smtp_sasl_password_maps = static:$email_address:$email_password
+sender_canonical_maps = regexp:/etc/postfix/sender_canonical_maps
 EOT
 
 echo restarting postfix
