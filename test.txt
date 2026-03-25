@@ -1,0 +1,70 @@
+# Type: PowerShell Script
+# Date: 06/02/2023
+# Author: Aristos Vasiliou
+# Purpose: install software
+############################################################
+$StartTime = Get-Date
+
+function install_powershell {
+    Invoke-Expression "& { $(Invoke-RestMethod https://aka.ms/install-powershell.ps1) } -UseMSI -Quiet"
+}
+
+function install_winget {
+    Write-Host installing winget
+    $progressPreference = 'silentlyContinue'
+    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+}
+
+function install_7zip {
+    Write-Host installing 7zip
+    winget install 7zip.7zip --accept-source-agreements
+}
+
+function install_vlc {
+    Write-Host installing vlc
+    winget install VideoLAN.VLC
+    Write-Host removing vlc shortcut from desktop
+    Remove-Item -Path 'C:\Users\Public\Desktop\VLC media player.lnk'
+}
+
+function install_notepad {
+    Write-Host installing notepad++
+    winget install Notepad++.Notepad++
+}
+
+function install_greenshot {
+    Write-Host installing greenshot
+    winget install Greenshot.Greenshot
+    foreach ($process in 'msedge') {
+        Write-Host waiting for $process
+        Do {
+            Start-Sleep 1
+        }
+        Until (Get-Process -ErrorAction SilentlyContinue -Name $process)
+    }
+    foreach ($process in 'msedge') {
+        Write-Host stopping $process
+        Stop-Process -Name $process -Force
+    }
+}
+
+function install_microsoft_office {
+    Write-Host installing microsoft office
+    winget install Microsoft.Office
+}
+
+install_powershell
+install_winget
+install_7zip
+install_vlc
+install_notepad
+install_greenshot
+install_microsoft_office
+
+$RunTime = New-TimeSpan -Start $StartTime -End (Get-Date)
+Write-Host Script execution took $RunTime.Minutes minutes and $RunTime.Seconds seconds -ForegroundColor Green
